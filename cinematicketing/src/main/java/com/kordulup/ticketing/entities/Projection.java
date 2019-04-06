@@ -27,7 +27,7 @@ public class Projection extends AbstractEntity {
 	@OneToOne
 	private Hall hall;
 	private String dimension;
-	@OneToMany(mappedBy="projection", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy="projection", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonManagedReference(value="projection")
 	List<Reservation> reservation = new ArrayList<>();
 	

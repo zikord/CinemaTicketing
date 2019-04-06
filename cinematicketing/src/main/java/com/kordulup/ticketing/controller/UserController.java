@@ -35,18 +35,6 @@ public class UserController {
 		userRepository.findAll().forEach(users::add);
 		return users;
 	}
-	
-	/*@GetMapping("/users/{username}")
-    public User getUser(@PathVariable(value = "username") String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
-        
-        //add past movies view for user profile
-
-        User user = new User();
-
-        return user;
-    }*/
 
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) {

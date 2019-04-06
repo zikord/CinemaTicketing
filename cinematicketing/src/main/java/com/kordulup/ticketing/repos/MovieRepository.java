@@ -14,4 +14,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
 	@Query("SELECT DISTINCT(movie) FROM Projection p WHERE DATE(p.projectionDate) = DATE(:pDate)")
 	List<Movie> findByProjectionsProjectionDate(@Param("pDate")LocalDate pDate);
 	
+	//@Query(nativeQuery = true, value = "SELECT movie, COUNT(*) FROM Projection GROUP BY movie LIMIT 3")
+	List<Movie> findTop3DistinctByOrderByProjections();
+	
 }

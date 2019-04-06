@@ -26,7 +26,7 @@ import com.kordulup.ticketing.entities.Movie;
 import com.kordulup.ticketing.repos.MovieRepository;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/movie")
 public class MovieController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(MovieController.class);
@@ -34,7 +34,7 @@ public class MovieController {
 	@Autowired
 	MovieRepository movieRepository;
 
-	@GetMapping("/movies")
+	@GetMapping("/all")
 	public List<Movie> getAllMovies() {
 		LOGGER.info("Inside getAllMovies()");
 
@@ -43,7 +43,7 @@ public class MovieController {
 		return movies;
 	}
 
-	@PostMapping("/movie")
+	@PostMapping("/save")
 	public Movie saveMovie(@RequestBody Movie m) {
 		LOGGER.info("Inside saveMovie(), saving movie:" + m);
 
@@ -51,7 +51,7 @@ public class MovieController {
 		return movie;
 	}
 
-	@DeleteMapping("movie/{id}")
+	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<String> deleteMovie(@PathVariable("id") Long id) {
 		LOGGER.info("Inside deleteMovie(), deleting movie with id:" + id);
 
@@ -59,7 +59,7 @@ public class MovieController {
 		return new ResponseEntity<>("Movie has been deleted!", HttpStatus.OK);
 	}
 	
-	@GetMapping("movie/{id}")
+	@GetMapping("/id/{id}")
 	public Movie getMovieById(@PathVariable("id") Long id) {
 		LOGGER.info("Inside getMovieById(), getting movie with id:" + id);
 		
@@ -67,7 +67,7 @@ public class MovieController {
 	}
 	
 	
-	@PutMapping("/movie/{id}")
+	@PutMapping("/update/{id}")
 	public ResponseEntity<Movie> updateMovie(@PathVariable("id") Long id, @RequestBody Movie m) {
 		LOGGER.info("Inside updateMovie(), updating movie with id:" + id);
 
@@ -91,12 +91,20 @@ public class MovieController {
 		}
 	}
 	
-	@GetMapping("/movies/date/{date}")
+	@GetMapping("/date/{date}")
 	public List<Movie> findByDate(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date){
 		LOGGER.info("Inside findByDate(): " + date);
 		
 		List<Movie> movies = movieRepository.findByProjectionsProjectionDate(date);
 		LOGGER.info("Inside findByDate(): " + movies);
 		return movies;
+	}
+	
+	@GetMapping("/top/")
+	public List<Movie> topMoviesList(){
+		LOGGER.info("Inside topMoviesList()");
+
+		return movieRepository.findTop3DistinctByOrderByProjections();
+		
 	}
 }
