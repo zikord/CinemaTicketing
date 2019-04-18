@@ -1,29 +1,36 @@
 package com.kordulup.ticketing.entities;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
 
 @Entity
 public class Movie extends AbstractEntity{
 
+	@JsonView(View.Summary.class)
 	private String title;
+	@JsonView(View.Summary.class)
 	private String description;
+	@JsonView(View.Summary.class)
 	private String genre;
+	@JsonView(View.Summary.class)
 	private Date dateOfRelease;
+	@JsonView(View.Summary.class)
 	private Integer duration;
+	@JsonView(View.Summary.class)
 	private Date dateOfFirstProjection;
+	@JsonView(View.Summary.class)
 	private String poster;
-	@OneToMany(mappedBy="movie", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JsonManagedReference
-	private List<Projection> projections = new ArrayList<>();
+	@OneToMany(mappedBy="movie", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@OrderBy("projectionTime")
+	private List<Projection> projections;
 
 	public String getTitle() {
 		return title;

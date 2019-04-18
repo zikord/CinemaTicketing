@@ -24,7 +24,7 @@ import com.kordulup.ticketing.entities.Projection;
 import com.kordulup.ticketing.repos.ProjectionRepository;
 
 @RestController
-@RequestMapping("/apiProjection")
+@RequestMapping("/api/projection")
 public class ProjectionController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ProjectionController.class);

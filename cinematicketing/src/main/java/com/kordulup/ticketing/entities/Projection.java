@@ -1,7 +1,7 @@
 package com.kordulup.ticketing.entities;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -19,17 +19,18 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 public class Projection extends AbstractEntity {
 
-	@ManyToOne
-	@JoinColumn(name="MOVIE_ID", nullable=false)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name="MOVIE_ID")
 	@JsonBackReference
 	private Movie movie;
-	private LocalDateTime projectionDate;
+	private LocalDate projectionDate;
+	private LocalTime projectionTime;
 	@OneToOne
 	private Hall hall;
 	private String dimension;
 	@OneToMany(mappedBy="projection", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JsonManagedReference(value="projection")
-	List<Reservation> reservation = new ArrayList<>();
+	List<Reservation> reservation;
 	
 	public Movie getMovie() {
 		return movie;
@@ -39,11 +40,11 @@ public class Projection extends AbstractEntity {
 		this.movie = movie;
 	}
 
-	public LocalDateTime getProjectionDate() {
+	public LocalDate getProjectionDate() {
 		return projectionDate;
 	}
 
-	public void setProjectionDate(LocalDateTime projectionDate) {
+	public void setProjectionDate(LocalDate projectionDate) {
 		this.projectionDate = projectionDate;
 	}
 
@@ -63,18 +64,26 @@ public class Projection extends AbstractEntity {
 		this.dimension = dimension;
 	}
 
-	@Override
-	public String toString() {
-		return "Projection [movie=" + movie + ", projectionDate=" + projectionDate + ", hall=" + hall + ", dimension="
-				+ dimension + "]";
-	}
-
 	public List<Reservation> getReservation() {
 		return reservation;
 	}
 
 	public void setReservation(List<Reservation> reservation) {
 		this.reservation = reservation;
+	}
+
+	public LocalTime getProjectionTime() {
+		return projectionTime;
+	}
+
+	public void setProjectionTime(LocalTime projectionTime) {
+		this.projectionTime = projectionTime;
+	}
+
+	@Override
+	public String toString() {
+		return "Projection [projectionDate=" + projectionDate + ", projectionTime="
+				+ projectionTime + ", hall=" + hall + ", dimension=" + dimension + ", reservation=" + reservation + "]";
 	}
 
 	

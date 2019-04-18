@@ -22,8 +22,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.kordulup.ticketing.entities.Movie;
+import com.kordulup.ticketing.entities.View;
 import com.kordulup.ticketing.repos.MovieRepository;
+import com.kordulup.ticketing.services.MovieService;
 
 @RestController
 @RequestMapping("/api/movie")
@@ -33,6 +36,9 @@ public class MovieController {
 
 	@Autowired
 	MovieRepository movieRepository;
+	
+	@Autowired
+	MovieService movieService;
 
 	@GetMapping("/all")
 	public List<Movie> getAllMovies() {
@@ -93,18 +99,17 @@ public class MovieController {
 	
 	@GetMapping("/date/{date}")
 	public List<Movie> findByDate(@PathVariable @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date){
-		LOGGER.info("Inside findByDate(): " + date);
-		
+		LOGGER.info("Inside findByDate(): " + date);		
 		List<Movie> movies = movieRepository.findByProjectionsProjectionDate(date);
 		LOGGER.info("Inside findByDate(): " + movies);
 		return movies;
 	}
 	
-	@GetMapping("/top/")
-	public List<Movie> topMoviesList(){
+	@JsonView(View.Summary.class)
+	@GetMapping("/top/{page}")
+	public List<Movie> topMoviesList(@PathVariable("page") Integer page){
 		LOGGER.info("Inside topMoviesList()");
-
-		return movieRepository.findTop3DistinctByOrderByProjections();
+		return movieService.pageableTopThreeMovies(page);
 		
 	}
 }
