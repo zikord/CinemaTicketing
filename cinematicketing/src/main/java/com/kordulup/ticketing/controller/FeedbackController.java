@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kordulup.ticketing.entities.Feedback;
-import com.kordulup.ticketing.entities.User;
-import com.kordulup.ticketing.repos.FeedbackRepository;
-import com.kordulup.ticketing.repos.UserRepository;
+import com.kordulup.ticketing.services.FeedbackService;
 
 @RestController
 @RequestMapping("/api")
@@ -24,18 +22,13 @@ public class FeedbackController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FeedbackController.class);
 	
 	@Autowired
-	FeedbackRepository feedbackRepository;
-	
-	@Autowired
-	UserRepository userRepository;
+	FeedbackService feedbackService;
 	
 	@PostMapping("feedback/")
 	public ResponseEntity<String> postFeedback(Principal user, @RequestBody Feedback feedback){
 		LOGGER.info("Inside postFeedback(), saving feedback: " + feedback);
-		User u = userRepository.findByUsername(user.getName()).orElse(null);
-		feedback.setUser(u);
-		feedbackRepository.save(feedback);
-		return new ResponseEntity<>(u.getUsername(), HttpStatus.ACCEPTED);
+		Feedback savedFeedback = feedbackService.saveFeedback(user, feedback);
+		return new ResponseEntity<>(savedFeedback.getUser().getUsername(), HttpStatus.ACCEPTED);
 	}
 	
 }

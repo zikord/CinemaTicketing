@@ -32,7 +32,7 @@ public class MovieServiceImpl implements MovieService {
 
 	@Override
 	public List<Movie> findMovieByDate(LocalDate date) {
-		LOGGER.info("Inside findMovieByDate()");
+		LOGGER.info("Inside findMovieByDate()" + date);
 		List<Movie> movies = movieRepository.findByProjectionsProjectionDate(date);
 		return movies;
 	}

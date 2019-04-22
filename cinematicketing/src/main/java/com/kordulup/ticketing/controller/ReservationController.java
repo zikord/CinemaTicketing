@@ -1,7 +1,6 @@
 package com.kordulup.ticketing.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kordulup.ticketing.entities.Reservation;
 import com.kordulup.ticketing.entities.ReservationSeats;
-import com.kordulup.ticketing.repos.CustomerRepository;
-import com.kordulup.ticketing.repos.ReservationRepository;
 import com.kordulup.ticketing.services.ReservationService;
 
 @RestController
@@ -28,26 +25,20 @@ public class ReservationController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ReservationController.class);
 	
 	@Autowired
-	ReservationRepository reservationRepository;
-	
-	@Autowired
-	CustomerRepository customerRepository;
-	
-	@Autowired
 	ReservationService reservationService;
 	
 	@GetMapping("/reservation/seats/{id}")
 	public List<ReservationSeats> getSeats(@PathVariable Long id){
 		LOGGER.info("Inside getSeats(), find by reservation id: " + id);		
-		List<ReservationSeats> seats = reservationRepository.findByProjectionId(id);		
+		List<ReservationSeats> seats = reservationService.findByProjectionId(id);		
 		return seats;				
 	}
 	
 	@GetMapping("/reservation/{id}")
-	public Optional<Reservation> getById(@PathVariable Long id){
+	public Reservation getById(@PathVariable Long id){
 		LOGGER.info("Inside getById(), find by reservation id: " + id);		
-		Optional<Reservation> reservation = reservationRepository.findById(id);		
-		return reservation;				
+		Reservation reservation = reservationService.findReservationById(id);		
+		return reservation;	
 	}
 	
 	

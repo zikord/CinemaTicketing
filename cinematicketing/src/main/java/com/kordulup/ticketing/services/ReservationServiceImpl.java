@@ -2,6 +2,8 @@ package com.kordulup.ticketing.services;
 
 
 
+import java.util.List;
+
 import javax.persistence.EntityNotFoundException;
 
 import org.slf4j.Logger;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.kordulup.ticketing.entities.Projection;
 import com.kordulup.ticketing.entities.Reservation;
+import com.kordulup.ticketing.entities.ReservationSeats;
 import com.kordulup.ticketing.repos.CustomerRepository;
 import com.kordulup.ticketing.repos.ProjectionRepository;
 import com.kordulup.ticketing.repos.ReservationRepository;
@@ -61,5 +64,19 @@ public class ReservationServiceImpl implements ReservationService {
 
 		return reservation;
 	}
+
+	@Override
+	public Reservation findReservationById(Long id) {
+		Reservation reservation = reservationRepository.findById(id).orElse(null);
+		return reservation;
+	}
+
+	@Override
+	public List<ReservationSeats> findByProjectionId(Long id) {
+		List<ReservationSeats> reservations = reservationRepository.findByProjectionId(id);
+		return reservations;
+	}
+	
+	
 
 }
